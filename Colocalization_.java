@@ -228,15 +228,7 @@ public class Colocalization_ implements PlugIn {
 			IJ.setAutoThreshold(image2, "Default dark stack");
 			threshold2 = image2.getProcessor().getMinThreshold(); 
 			IJ.resetThreshold(image2);
-			//threshold1 = image1.getProcessor().getAutoThreshold();
-			//threshold2 = image2.getProcessor().getAutoThreshold();
 		}
-		/**
-		 * Calculates max intensities.
-		 */
-		IJ.showStatus("Calculating max intensities..."); // Updates process status
-		max1 = image1.getStatistics().max; // Calculates maximum intensity value for image 1
-		max2 = image2.getStatistics().max; // Calculates maximum intensity value for image 2
 		/**
 		 * Calculates mean pixel intensities in the ROI (pixels equal to or above
 		 * threshold) of image1 and image2
@@ -246,20 +238,28 @@ public class Colocalization_ implements PlugIn {
 			IJ.showProgress(i, endFrame1); // Updates process progress bar
 			ImageProcessor grayprocessor1 = stack1.getProcessor(i); // Gets image 1 processor for calculation
 			ImageProcessor grayprocessor2 = stack2.getProcessor(i); // Gets image 2 processor for calculation
-			for (int y = 0; y < height1 + 1; y++)
-				for (int x = 0; x < width1 + 1; x++) {
+			for (int y = 0; y < height1; y++)
+				for (int x = 0; x < width1; x++) {
 					int value1 = grayprocessor1.getPixel(x, y);
 					int value2 = grayprocessor2.getPixel(x, y);
 					if (value1 >= threshold1 || value2 >= threshold2) { // Only pixels in the ROI are taken into account
 						meansum1 = meansum1 + value1; // sum of all intensities for image 1 ROI
 						count1 = count1 + 1; // the number of pixels in the ROI of image 1 ROI
+						if (value1 > max1) {
+							max1 = value1;
+						}
+						if (value2 > max2) {
+							max2 = value2;
+						}
 					}
-					if (value1 > threshold1 || value2 > threshold2) { // Only pixels in the ROI are taken into account
+					if (value1 >= threshold1 || value2 >= threshold2) { // Only pixels in the ROI are taken into account
 						meansum2 = meansum2 + value2; // sum of all intensities for image 2 ROI
 						count2 = count2 + 1; // the number of pixels in the ROI of image 2 ROI
 					}
 				}
 		}
+		System.out.println(max1);
+		System.out.println(max2);
 		/**
 		 * To avoid division by zero checks whether ROIs of input images contain any
 		 * data
