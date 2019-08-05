@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 
 public class Help_and_documentation_ implements PlugIn {
 	public void run(String arg) {
-		// Opens Colocalization colormap github repository in a default browser
+		// Opens Colocalization colormap website
 		java.awt.Desktop BrowserDesktop = java.awt.Desktop.getDesktop();
 		try {
 			BrowserDesktop.browse(new java.net.URI("http://sites.google.com/site/colocalizationcolormap/"));

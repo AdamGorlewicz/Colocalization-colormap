@@ -43,6 +43,15 @@ public class Colocalization_batch_processor_ implements PlugIn {
 		String outputpath = IJ.getDirectory("Choose output directory");
 		if (outputpath == null)
 			return;
+		// Clears pre-existing output folder data
+		File folder3 = new File(outputpath);
+		File[] list = folder3.listFiles();
+        if (list != null) {
+            for (int i = 0; i < list.length; i++) {
+                 File tmpF = list[i];
+                 tmpF.delete();
+           }
+       };
 		// Checks whether input folders contain pairs of corresponding images
 		if (listOfFiles1.length != listOfFiles2.length) {
 			// Displays exception window if the number of files id different
@@ -80,7 +89,7 @@ public class Colocalization_batch_processor_ implements PlugIn {
 		IJ.log("Autothreshold: " + String.valueOf(thresholdstat)); // Updates log
 		IJ.log("");
 		for (int i = 0; i < listOfFiles1.length; i++) {
-			// Checks the correct structure ofinput folders (single folders containing files only)
+			// Checks the correct structure of input folders (single folders containing files only)
 			if (listOfFiles1[i].isDirectory() == true || listOfFiles2[i].isDirectory() == true) {
 				// Displays exception window if subfolders are detected
 				IJ.showMessage("Subfolder within inputfolders are not allowed");
@@ -89,7 +98,7 @@ public class Colocalization_batch_processor_ implements PlugIn {
 			if (listOfFiles1[i].isFile() == true & listOfFiles2[i].isFile() == true) {
 				IJ.showProgress(i, listOfFiles1.length); // Updates process progress bar
 				ImagePlus image1 = new ImagePlus(inputpath1 + listOfFiles1[i].getName()); // Loads the first image based on input path
-				ImagePlus image2 = new ImagePlus(inputpath2 + listOfFiles2[i].getName()); // Loads the secondimage based on input path
+				ImagePlus image2 = new ImagePlus(inputpath2 + listOfFiles2[i].getName()); // Loads the second image based on input path
 
 				int index1 = listOfFiles1[i].getName().lastIndexOf('.');
 				if (index1 == -1) {

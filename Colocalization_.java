@@ -6,6 +6,7 @@
 package Colocalization_Colormap_;
 
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -372,10 +373,6 @@ public class Colocalization_ implements PlugIn {
 			ImagePlus colocalizationimage = new ImagePlus(outputfile + " colocalization", colocalizationstack); // Generates
 																												// colormap
 																												// image
-			IJ.showStatus("Displaying results..."); // Updates process status.
-			IJ.log("Displaying results..."); // Updates log
-			colocalizationimage.show(); // Displays colormap image
-			TextWindow textwindow = new TextWindow("Index of correlation", Double.toString(Icorr), 435, 180);
 			/**
 			 * Saving nMDPs
 			 */
@@ -391,6 +388,10 @@ public class Colocalization_ implements PlugIn {
 					printwritter.println(element);
 				printwritter.close();
 			}
+			IJ.showStatus("Displaying results..."); // Updates process status.
+			IJ.log("Displaying results..."); // Updates log
+			colocalizationimage.show(); // Displays colormap image
+			TextWindow textwindow = new TextWindow("Index of correlation", Double.toString(Icorr), 435, 180);
 		}
 		/**
 		 * Saves results in batchprocessor mode
@@ -399,15 +400,19 @@ public class Colocalization_ implements PlugIn {
 			IJ.log("Saving results..."); // Updates log
 			// Saves nMDPs in txt file
 			PrintWriter printwritter = new PrintWriter(
-					new FileOutputStream(outputpath + "nMDPs " + outputfile + ".txt"));
+					new FileOutputStream(outputpath + "nMDPs " + outputfile + ".txt"));	    
 			for (Double element : resulttable)
 				printwritter.println(element);
-			printwritter.close();
-			// Saves Icorr in txt file
-			PrintWriter printwritter2 = new PrintWriter(
-					new FileOutputStream(outputpath + "Icorr " + outputfile + ".txt"));
-			printwritter2.println(Icorr);
-			printwritter2.close();
+				printwritter.close();
+			// Saves Icorr values and list of analyzed channels in txt file
+			FileWriter fileWriter = new FileWriter(outputpath + "List of Icorr values.txt", true); 
+			PrintWriter printWriter2 = new PrintWriter(fileWriter);
+			FileWriter fileWriter2 = new FileWriter(outputpath + "Names of colocalized channels.txt", true); 
+			PrintWriter printWriter3 = new PrintWriter(fileWriter2);
+		    printWriter2.println(Icorr); 
+		    printWriter2.close();    
+		    printWriter3.println(outputfile); 
+		    printWriter3.close();	
 			ImagePlus colocalizationimage = new ImagePlus(outputfile + " colocalization", colocalizationstack); // Generates
 																												// colormap
 																												// image
